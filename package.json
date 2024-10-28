@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/LucaAvveduto/5C_AvvedutoRipamontiKotis_VisiteSpecialistiche/issues"
   },
-  "homepage": "https://github.com/LucaAvveduto/5C_AvvedutoRipamontiKotis_VisiteSpecialistiche#readme"
+  "homepage": "https://github.com/LucaAvveduto/5C_AvvedutoRipamontiKotis_VisiteSpecialistiche#readme",
+  "dependencies": {
+    "boostrap": "^2.0.0"
+  }
 }
