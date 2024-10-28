@@ -1,0 +1,2 @@
+# 5C_AvvedutoRipamintiKotis_VisiteSpecialistiche
+Repository compito visita specialistica.
