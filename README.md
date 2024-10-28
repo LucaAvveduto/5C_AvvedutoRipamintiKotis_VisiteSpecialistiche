@@ -15,5 +15,5 @@ limitations under the License.
 ---
 
 
-# 5C_AvvedutoRipamontiKotis_VisiteSpecialistiche
-Repository compito visita specialistica.
+# Visite Specialistiche Curoben
+Repository per il compito visita specialistica di TPSI.
