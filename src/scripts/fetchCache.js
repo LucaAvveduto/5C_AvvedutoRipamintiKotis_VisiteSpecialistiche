@@ -1,4 +1,4 @@
-import {cacheKey, cacheToken, cacheURL} from "../../config.js";
+import {cacheKey, cacheToken, cacheURL} from "../../config.json";
 export function fetchCache(service, data) {
     return new Promise(function(resolve, reject) {
         fetch(cacheURL + service,{
