@@ -7,30 +7,23 @@ export function createForm(parentElement) {
         render: () => { 
             let html = "<div class='txt-field'>Data<input type='date' class='form-control' id='dateInput'></div>\n";
             for(const key in data)  html += "<div class='txt-field'>" + key + "<input type='text' class='form-control' id='" + key + "'></div>\n";    
-            html += "<button id='submit' class='btn btn-primary'>Submit</button>";
+            html += 
+                `<button id='cancel' class='btn btn-danger'>Cancel</button>
+                <button id='submit' class='btn btn-success'>Submit</button>`
+            ;
             parentElement.innerHTML = html;
             document.querySelector("#submit").onclick = () => {
-                let result = [document.getElementById("dateInput").value];
-                document.getElementById("dateInput").value = "";
                 for(const key in data) {
                     result.push(document.getElementById(key).value);
                     document.getElementById(key).value = "";
                 }
-                callback(() => {
-                    const res = {
-                        date: new Date(result[0]).toLocaleDateString(),
-                        rooms: {}
-                    }
-                    let index = 1;
-                    for(const key in data) {
-                        if(index < result.length) {
-                            res.rooms[key] = result[index];
-                            index++;
-                        }
-                    }
-                    return res;
+                callback((result) => {
+                    console.log(result);
                 });
-            }          
+            }
+            document.querySelector("#cancel").onclick = () => {
+                for(const key in data) document.getElementById(key).value = "";
+            }
         },
     };
 };
