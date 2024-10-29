@@ -1,4 +1,2 @@
-import { parseConfiguration } from "./scripts/jsonParser.js"
+import { fetchCache } from "./scripts/fetchCache.js";
 
-parseConfiguration("../../config.json").then(console.log).catch(console.error);
-console.log("Configuration");
