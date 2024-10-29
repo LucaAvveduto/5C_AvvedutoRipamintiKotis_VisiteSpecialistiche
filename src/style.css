@@ -6,3 +6,7 @@ html {
 .title {
     margin-top: 2%;
 }
+
+#form > * {
+    margin-top: 2%;
+}
