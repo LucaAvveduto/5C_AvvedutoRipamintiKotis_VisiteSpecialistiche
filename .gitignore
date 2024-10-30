@@ -8,3 +8,5 @@ node_modules
 *.code-workspace
 config.json
 package-lock.json
+tailwind.config.js
+src/output.css
