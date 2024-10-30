@@ -1,21 +1,46 @@
 <!DOCTYPE html>
 <html lang="it">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css" type="text/css" />
-        <script src="../node_modules/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="./style.css">
-        <title>Prenotazioni - Curoben</title>
-    </head>
-    <body>
-        <div class="container text-center">
-            <div class="row">
-                <div class="col">
-                    <h1 class="title">Centro visite specilistiche Curoben</h1>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css" type="text/css" />
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="./style.css">
+    <title>Prenotazioni - Curoben</title>
+</head>
+
+<body>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <h1 class="title">Centro visite specilistiche Curoben</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Launch static backdrop modal
+                </button>
+
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modulo di prenotazione</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="content"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
     <script type="module" src="./index.js"></script>
-    </body>
+</body>
+
 </html>
