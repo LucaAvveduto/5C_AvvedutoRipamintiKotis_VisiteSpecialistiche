@@ -7,14 +7,13 @@ export function createForm(parentElement) {
         render: () => {
             let types = ["date","number","text"];
             let html = "<div class='modal-body'>";
+            let firstTime = 8;
+            let lastTime = 12;
             html += data.map((name,index) => { 
                 return types[index] === "number" ? 
-                `<select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>` :
+                `<select class="form-select" id='` + name + `' aria-label="Default select example">
+                    <option selected>Orario</option>`
+                   + generateOptions(firstTime,lastTime) + "</select>" :
                     "<div class='label'>" + name + "<input type='" + types[index] +"' class='form-control' id='" + name + "'/></div>";
             }).join('\n') + "</div>";
             html += 
@@ -28,12 +27,21 @@ export function createForm(parentElement) {
                 const result = data.map((name) => {
                     return document.querySelector("#" + name).value;
                 });
-                data.forEach((val) => document.getElementById(val).value = "");
+                data.forEach((val) => val === "Ora" ? document.getElementById(val).value = "Orario" :document.getElementById(val).value = "");
                 callback(result);
             }
             document.querySelector("#cancel").onclick = () => {
-                data.forEach((val) => document.getElementById(val).value = "");
+                data.forEach((val) => val === "Ora" ? document.getElementById(val).value = "Orario" :document.getElementById(val).value = "");
             }
         },
     };
 };
+
+function generateOptions(firstItem,lastItem) {
+    let result = "";
+    const template = "<option value='%val'>%val</option>"
+    for (let i = firstItem; i <= lastItem; i++) {
+        result += template.replaceAll("%val", i);
+    }
+    return result;
+}

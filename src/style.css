@@ -7,8 +7,8 @@ html {
     margin-top: 2%;
 }
 
-#form > * {
-    margin-top: 2%;
+.modal-body > * {
+    margin-top: 5% !important;
 }
 
 .hidden {
