@@ -6,4 +6,4 @@ const monday = (moment().startOf('week'));
 const mondayDate = new Date(monday.format());
 console.log(mondayDate.toLocaleDateString());
 const tue = new Date(new Date().setDate(mondayDate.getDate() + 1));
-console.log(tue.toLocaleDateString());
+console.log(tue.toLocaleDateString()); 

@@ -7,7 +7,7 @@ export const createTable = (parentElement) => {
   let availabilities = {};
   let initialConfig;
   let currentWeekOffset = 0;
-  const categories = ["Cardiologia", "Psicologia", "Oncologia", "Ortopedia", "Neurologia"];
+  const categories = ["Cardiologia", "Psicologia", "Oncologia", "Ortopedia", "Neurologia"]; //da usare il config.json
 
   const initializeAvailabilities = (config) => {
     initialConfig = config;
@@ -28,11 +28,11 @@ export const createTable = (parentElement) => {
 
   const getWeekDates = (offset) => {
     const today = new Date();
-    today.setDate(today.getDate() + offset * 7);
+    today.setDate(today.getDate() + offset * 7); //Usiamo la moment
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - today.getDay() + 1);
     const weekDates = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) { // i<7 
       const date = new Date(startOfWeek);
       date.setDate(startOfWeek.getDate() + i);
       weekDates.push(date);
