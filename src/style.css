@@ -10,3 +10,15 @@ html {
 #form > * {
     margin-top: 2%;
 }
+
+.hidden {
+    display: none;
+}
+
+.showable {
+    display: block;
+}
+
+.label {
+    text-align: start !important;
+}
