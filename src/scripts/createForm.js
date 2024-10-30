@@ -7,25 +7,15 @@ export function createForm(parentElement) {
         render: () => {
             let types = ["date","number","text"];
             let html = "<div class='modal-body'>";
-            let tempHtml = "";
-            html += data.map((name,index) => {
-                if(types[index] === "number") {
-                    tempHtml += 
-                    `<div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown button
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item active" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Separated link</a></li>
-                        </ul>
-                    </div>`;
-                }
-                else tempHtml += "<div class='label'>" + name + "<input type='" + types[index] +"' class='form-control' id='" + name + "'/></div>";
-                return tempHtml;
+            html += data.map((name,index) => { 
+                return types[index] === "number" ? 
+                `<select class="form-select" aria-label="Default select example">
+                    <option selected>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>` :
+                    "<div class='label'>" + name + "<input type='" + types[index] +"' class='form-control' id='" + name + "'/></div>";
             }).join('\n') + "</div>";
             html += 
                 `<div class="modal-footer">
