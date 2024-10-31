@@ -5,6 +5,8 @@ html {
 
 .title {
     margin-top: 2%;
+    font-size: revert !important;
+    font-weight: revert !important;
 }
 
 .modal-body > * {
