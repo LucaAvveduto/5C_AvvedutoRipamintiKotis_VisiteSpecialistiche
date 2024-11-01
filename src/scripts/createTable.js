@@ -1,126 +1,63 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const moment = require("moment");
+import moment from "../../node_modules/moment/dist/moment.js"
 
 export const createTable = (parentElement) => {
-  let data;
   let availabilities = {};
-  let initialConfig;
+  let config = {};
   let currentWeekOffset = 0;
-  const categories = ["Cardiologia", "Psicologia", "Oncologia", "Ortopedia", "Neurologia"]; //da usare il config.json
-
-  const initializeAvailabilities = (config) => {
-    initialConfig = config;
-    let today = new Date();
-    for (let i = 0; i < 30; i++) {
-      let dateKey = new Date(today);
-      dateKey.setDate(today.getDate() + i);
-      dateKey = dateKey.toLocaleDateString();
-      availabilities[dateKey] = {};
-      for (const key in initialConfig) {
-        availabilities[dateKey][key] = {};
-        for (const hour in initialConfig[key]) {
-          availabilities[dateKey][key][hour] = initialConfig[key][hour];
-        }
-      }
-    }
-  };
 
   const getWeekDates = (offset) => {
-    const today = new Date();
-    today.setDate(today.getDate() + offset * 7); //Usiamo la moment
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay() + 1);
+    const startOfWeek = moment().startOf('isoWeek').add(offset, 'weeks');
     const weekDates = [];
-    for (let i = 0; i < 5; i++) { // i<7 
-      const date = new Date(startOfWeek);
-      date.setDate(startOfWeek.getDate() + i);
+  
+    for (let day = 0; day < 5; day++) {
+      const date = startOfWeek.clone().add(day, 'days').format('DDMMYYYY');
       weekDates.push(date);
     }
+
     return weekDates;
   };
+  
 
-  const renderAllTables = () => {
-    parentElement.innerHTML = '';
-    categories.forEach(category => {
-      const tableHtml = render(category)();
-      parentElement.innerHTML += tableHtml;
-    });
-  };
-
-  return {
-    render: (selectedCategory) => {
-      return () => {
-        fetchCache("get")
-          .then((resp) => {
-            availabilities = JSON.parse(resp.result);
-          });
-
+  return{
+     render:(selectedCategory) => {
+      fetchCache("get").then((resp) => {
+        availabilities = JSON.parse(resp.result);
         const weekDates = getWeekDates(currentWeekOffset);
-        let tableHTML = '<h3>' + selectedCategory + '</h3><table><thead><tr><th>Ora</th>';
-        
-        // formattazione delle intestazioni
+  
+        let headerRow = '<tr><th>Ora</th>';
         weekDates.forEach(date => {
-          const formattedDate = moment(date).format('DD/MM/YYYY'); // Formato di esempio
-          tableHTML += '<th>' + formattedDate + '</th>';
+          headerRow += '<th>' + moment(date, 'DDMMYYYY').format('dddd') + '</th>';
         });
-        
-        tableHTML += '</tr></thead><tbody>';
-
-        for (let hour = 8; hour <= 12; hour++) {
-          tableHTML += '<tr><td>' + hour + ':00</td>';
+        headerRow += '</tr>';
+  
+        const hours = [8, 9, 10, 11, 12];
+        let rows = '';
+        hours.forEach(hour => {
+          rows += '<tr><td>' + hour + ':00</td>';
           weekDates.forEach(date => {
-            const dateStr = date.toLocaleDateString();
-            let availability = "N/A"; 
-            if (availabilities[dateStr] && availabilities[dateStr][selectedCategory]) {
-              availability = availabilities[dateStr][selectedCategory][hour] || "Disponibile";
-            }
-            tableHTML += '<td>' + availability + '</td>';
+            const key = selectedCategory + '-' + date + '-' + hour;
+            const booking = availabilities[key] || '';
+            rows += '<td>' + (booking ? 'X' : '') + '</td>';
           });
-          tableHTML += '</tr>';
-        }
-        tableHTML += '</tbody></table>';
-        return tableHTML; 
-      };
-    },
-
-    build: (dataInput) => {
-      return new Promise((resolve, reject) => {
-        data = dataInput; 
-        initializeAvailabilities(data);
-
-        fetchCache("get")
-          .then((r) => JSON.parse(r.result))
-          .then((response) => {
-            if (response == null) {
-              fetchCache("set", availabilities).then(resolve).catch(reject);
-            } else {
-              availabilities = response;
-              resolve("No problem found");
-            }
-          })
-          .catch(reject);
+          rows += '</tr>';
+        });
+  
+        const tableHTML = 
+          '<h3>' + selectedCategory + '</h3>' +
+          '<table><thead>' + headerRow + '</thead>' +
+          '<tbody>' + rows + '</tbody></table>';
+  
+        parentElement.innerHTML = tableHTML;
       });
     },
-
-    changeWeek: (direction) => {
-      currentWeekOffset += direction;
-      renderAllTables();
-    },
-
-    add: (reservation) => {
-      return new Promise((resolve, reject) => {
-        const dateStr = reservation.date.toLocaleDateString(); 
-        const hour = reservation.hour;
-        const category = reservation.category;
-
-        if (availabilities[dateStr] && availabilities[dateStr][category] && availabilities[dateStr][category][hour] > 0) {
-          availabilities[dateStr][category][hour] -= 1;
-          fetchCache("set", availabilities).then(resolve).catch(reject);
-        } else {
-          resolve(false);
-        }
-      });
+  
+     buildTable: (dataInput) => {
+      return parseConfiguration("../../config.json")
+        .then((parsedConfig) => {
+          config = parsedConfig;
+          availabilities = dataInput;
+          return fetchCache("set", availabilities);
+        });
     }
   };
 };
