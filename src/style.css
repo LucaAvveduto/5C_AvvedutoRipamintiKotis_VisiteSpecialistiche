@@ -24,3 +24,7 @@ html {
 .label {
     text-align: start !important;
 }
+
+#avabTable {
+    margin-top: 15%;
+}

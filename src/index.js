@@ -22,7 +22,7 @@ navBarCreate();
 const fetchComp = generateFetchComponent();
 fetchComp.build("../../config.json");
 
-const table = createTable(document.getElementById("cicco"));
+const table = createTable(document.getElementById("avabTable"));
 table.buildTable().then(() => {
     table.render("Cardiologia");
 }).catch(console.error)
