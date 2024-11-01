@@ -1,3 +1,5 @@
+import { parseConfiguration } from "./jsonParser.js";
+
 export function createForm(parentElement) {
     let data = [];
     let callback = null;
@@ -7,18 +9,17 @@ export function createForm(parentElement) {
         render: () => {
             let types = ["date","number","text"];
             let html = "<div class='modal-body'>";
-            let firstTime = 8;
-            let lastTime = 12;
+            const opt = generateOptions().then((op) => { 
             html += data.map((name,index) => { 
                 return types[index] === "number" ? 
                 `<select class="form-select" id='` + name + `' aria-label="Default select example">
                     <option selected>Orario</option>`
-                   + generateOptions(firstTime,lastTime) + "</select>" :
+                   + op + "</select>" :
                     "<div class='label'>" + name + "<input type='" + types[index] +"' class='form-control' id='" + name + "'/></div>";
             }).join('\n') + "</div>";
             html += 
                 `<div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="cancel">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="cancel" data-bs-dismiss="modal">Cancel</button>
                     <button id='submit' class='btn btn-success'>Submit</button>
                 </div>`
             ;
@@ -27,21 +28,40 @@ export function createForm(parentElement) {
                 const result = data.map((name) => {
                     return document.querySelector("#" + name).value;
                 });
-                data.forEach((val) => val === "Ora" ? document.getElementById(val).value = "Orario" :document.getElementById(val).value = "");
+                data.forEach((val) => {
+                    const node = document.getElementById(val);
+                    if(node.tagName === "SELECT") {
+                        const def = document.querySelector("#" + val +" option[selected]");
+                        node.value = def.value; 
+                    } 
+                    else node.value = "";
+                });
                 callback(result);
             }
-            document.querySelector("#cancel").onclick = () => {
-                data.forEach((val) => val === "Ora" ? document.getElementById(val).value = "Orario" :document.getElementById(val).value = "");
-            }
+        }).catch(console.error)
         },
     };
 };
 
-function generateOptions(firstItem,lastItem) {
-    let result = "";
-    const template = "<option value='%val'>%val</option>"
-    for (let i = firstItem; i <= lastItem; i++) {
-        result += template.replaceAll("%val", i);
-    }
-    return result;
+function getJson() {
+    return new Promise((resolve, reject) => {
+        return parseConfiguration("../../config.json").then((parsedConfig) => {resolve(parsedConfig)}).catch(reject);
+    })
+}
+
+function generateOptions() {
+    let firstItem;
+    let lastItem;
+    return new Promise((resolve, reject) => {
+        getJson().then((json) => {
+            firstItem = json.hours[0];
+            lastItem = json.hours[json.hours.length - 1];
+            let result = "";
+            const template = "<option value='%val'>%val</option>"
+            for (let i = firstItem; i <= lastItem; i++) {
+                result += template.replaceAll("%val", i);
+            }
+            resolve(result);
+        }).catch(reject);
+    })
 }
