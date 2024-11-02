@@ -1,28 +1,38 @@
-import moment from "../node_modules/moment/dist/moment.js";
-import {navBarCreate} from "./scripts/navbar.js";
+import { navBarComponent } from "./scripts/navbar.js";
 import { createForm } from "./scripts/createForm.js";
 import { createTable } from "./scripts/createTable.js";
 import { generateFetchComponent } from "./scripts/fetchCache.js"
 
-
-moment.locale("it");
-const monday = (moment().startOf('week'));
-console.log(monday.format("dddd"))
-const mondayDate = new Date(monday.format());
-console.log(mondayDate.toLocaleDateString());
-const tue = new Date(new Date().setDate(mondayDate.getDate() + 1));
-console.log(tue.toLocaleDateString()); 
+const forwardButton = document.getElementById("ahead");
+const backButton = document.getElementById("back");
+let offset = 0;
 
 const f = createForm(document.querySelector(".content"));
 f.setLabels(["Data","Ora","Nominativo"]);
-f.onsubmit(console.log)
 f.render();
 
-navBarCreate();
 const fetchComp = generateFetchComponent();
 fetchComp.build("../../config.json");
 
 const table = createTable(document.getElementById("avabTable"));
-table.buildTable().then(() => {
-    table.render("Cardiologia");
-}).catch(console.error)
+table.buildTable().then(console.log).catch(console.error)
+
+
+const navbar = navBarComponent(document.getElementById("navbar"));
+navbar.callback((element)=>{
+    forwardButton.onclick = () => {
+        offset++;
+        table.render(element,offset);
+    };
+    
+    backButton.onclick = () => {
+        offset--;
+        table.render(element,offset);
+    };
+
+    table.render(element,offset);
+})
+
+navbar.build("../../config.json").then(()=>{
+    navbar.render();
+}).catch(console.error);
