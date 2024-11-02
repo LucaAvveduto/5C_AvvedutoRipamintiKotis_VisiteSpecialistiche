@@ -11,14 +11,12 @@ export const createTable = (parentElement) => {
   
 
   const getWeekDates = (offset) => {
-    const startOfWeek = offset < 0 ? (moment().startOf(`isoWeek`)).subtract(offset, `weeks`) : (moment().startOf(`isoWeek`)).add(offset, `weeks`); 
+    const startOfWeek = offset < 0 ? moment().startOf('week').subtract(Math.abs(offset), 'weeks') : moment().startOf('week').add(offset, 'weeks'); 
     const weekDates = [];
-
-    for (let day = 0; day < 5; day++) {
-      const date = startOfWeek.clone().add(day, `days`).format(`DDMMYYYY`);
+    for (let day = 1; day < 6; day++) {
+      const date = startOfWeek.clone().add(day, 'days').format('DDMMYYYY');
       weekDates.push(date);
     }
-
     return weekDates;
   };
 
