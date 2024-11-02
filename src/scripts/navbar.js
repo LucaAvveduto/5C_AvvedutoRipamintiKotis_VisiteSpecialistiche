@@ -41,7 +41,7 @@ export function navBarComponent(parentElement) {
             newNavBar += `</div>
                                 </div>
                                 <div class="flex items-center">
-                                    <button type="button" class="rounded-full bg-gray-700 p-2 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <button type="button" id="open" class="rounded-full bg-gray-700 p-2 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                         Prenota
                                     </button>
                                 </div>
@@ -49,6 +49,8 @@ export function navBarComponent(parentElement) {
                             </div>`;
 
             parentElement.innerHTML = newNavBar;
+
+            document.querySelector("#open").onclick = () => document.querySelector("#result").innerText = "";
 
             if (bool === false) {
                 activeNavBar(config.tipologie[0], config.tipologie);

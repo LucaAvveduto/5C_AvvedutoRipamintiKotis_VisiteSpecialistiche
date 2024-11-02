@@ -4,48 +4,61 @@ export function createForm(parentElement) {
     let data = [];
     let callback = null;
     return {
-        setLabels: (labels) => { data = labels;},  
-        onsubmit: (callbackInput) => { callback = callbackInput},
+        setLabels: (labels) => { data = labels; },
+        onsubmit: (callbackInput) => { callback = callbackInput },
         render: () => {
-            let types = ["date","number","text"];
+            let types = ["date", "number", "text"];
             let html = "<div class='modal-body'>";
-            const opt = generateOptions().then((op) => { 
-            html += data.map((name,index) => { 
-                return types[index] === "number" ? 
-                `<select class="form-select" id='` + name + `' aria-label="Default select example">
+            const opt = generateOptions().then((op) => {
+                html += data.map((name, index) => {
+                    return types[index] === "number" ?
+                        `<select class="form-select" id='` + name + `' aria-label="Default select example">
                     <option selected>Orario</option>`
-                   + op + "</select>" :
-                    "<div class='label'>" + name + "<input type='" + types[index] +"' class='form-control' id='" + name + "'/></div>";
-            }).join('\n') + "</div>";
-            html += 
-                `<div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="cancel" data-bs-dismiss="modal">Cancel</button>
+                        + op + "</select>" :
+                        "<div class='label'>" + name + "<input type='" + types[index] + "' class='form-control' id='" + name + "'/></div>";
+                }).join('\n') + "</div>";
+                html +=
+                    `<div id="result"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger cl" id="cancel" data-bs-dismiss="modal">Cancel</button>
                     <button id='submit' class='btn btn-success'>Submit</button>
                 </div>`
-            ;
-            parentElement.innerHTML = html;
-            document.querySelector("#submit").onclick = () => {
-                const result = data.map((name) => {
-                    return document.querySelector("#" + name).value;
-                });
-                data.forEach((val) => {
-                    const node = document.getElementById(val);
-                    if(node.tagName === "SELECT") {
-                        const def = document.querySelector("#" + val +" option[selected]");
-                        node.value = def.value; 
-                    } 
-                    else node.value = "";
-                });
-                callback(result);
-            }
-        }).catch(console.error)
+                    ;
+                parentElement.innerHTML = html;
+                document.querySelector("#submit").onclick = () => {
+                    const result = data.map((name) => {
+                        return document.querySelector("#" + name).value;
+                    });
+                    data.forEach((val) => {
+                        const node = document.getElementById(val);
+                        if (node.tagName === "SELECT") {
+                            const def = document.querySelector("#" + val + " option[selected]");
+                            node.value = def.value;
+                        }
+                        else node.value = "";
+                    });
+                    callback(result);
+                }
+                document.querySelectorAll(".cl").forEach((btn) => {
+                    btn.onclick = () => {
+                        data.forEach((val) => {
+                            const node = document.getElementById(val);
+                            if (node.tagName === "SELECT") {
+                                const def = document.querySelector("#" + val + " option[selected]");
+                                node.value = def.value;
+                            }
+                            else node.value = "";
+                        });
+                    }
+                })
+            }).catch(console.error)
         },
     };
 };
 
 function getJson() {
     return new Promise((resolve, reject) => {
-        return parseConfiguration("../../config.json").then((parsedConfig) => {resolve(parsedConfig)}).catch(reject);
+        return parseConfiguration("../../config.json").then((parsedConfig) => { resolve(parsedConfig) }).catch(reject);
     })
 }
 
