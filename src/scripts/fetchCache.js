@@ -33,7 +33,7 @@ export function generateFetchComponent() {
         },
         getData: () => {
             return new Promise((resolve, reject) => {
-                fetch("https://ws.cipiaceinfo.it/cache/get", {
+                fetch(config.cacheURLGet, {
                         method: "POST",
                         headers: {
                             "content-type": "application/json",
