@@ -62,12 +62,12 @@ navbar.callback((element) => {
         });
     });
     f.render();
+    setInterval(()=>{
+        table.render(element, offset);
+    }, 300000);
 })
 
 navbar.build("../../config.json").then(() => {
     navbar.render();
 }).catch(console.error);
 
-setInterval(()=>{
-    table.render();
-}, 300000);
