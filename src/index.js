@@ -67,3 +67,7 @@ navbar.callback((element) => {
 navbar.build("../../config.json").then(() => {
     navbar.render();
 }).catch(console.error);
+
+setInterval(()=>{
+    table.render();
+}, 300000);
