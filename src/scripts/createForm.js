@@ -3,9 +3,11 @@ import { parseConfiguration } from "./jsonParser.js";
 export function createForm(parentElement) {
     let data = [];
     let callback = null;
+    let cancel = null;
     return {
         setLabels: (labels) => { data = labels; },
         onsubmit: (callbackInput) => { callback = callbackInput },
+        oncancel: (callbackInput) => { cancel = callbackInput },
         render: () => {
             let types = ["date", "number", "text"];
             let html = "<div class='modal-body'>";
@@ -49,6 +51,7 @@ export function createForm(parentElement) {
                             }
                             else node.value = "";
                         });
+                        cancel();
                     }
                 })
             }).catch(console.error)

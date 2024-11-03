@@ -31,6 +31,7 @@ navbar.callback((element) => {
     table.render(element, offset);
     const f = createForm(document.querySelector(".content"));
     f.setLabels(["Data", "Ora", "Nominativo"]);
+    f.oncancel(() => { table.render(element, offset); });
     f.onsubmit((values) => {
         let validateInput;
         const date = moment(values[0], "YYYY/MM/DD");
