@@ -10,7 +10,7 @@ let offset = 0;
 
 
 const fetchComp = generateFetchComponent();
-fetchComp.build("../../config.json");
+fetchComp.build("../../config.json").then(console.log).catch(console.error);
 
 const table = createTable(document.getElementById("avabTable"));
 table.buildTable().then(console.log).catch(console.error)
