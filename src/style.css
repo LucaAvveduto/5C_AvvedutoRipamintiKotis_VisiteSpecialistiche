@@ -33,3 +33,7 @@ html {
     position: absolute;
     margin-top: 6%;
 }
+
+#loading {
+    margin-top: 25% !important;
+}

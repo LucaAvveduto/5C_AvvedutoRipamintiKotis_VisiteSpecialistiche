@@ -39,7 +39,11 @@ export function createForm(parentElement) {
                         }
                         else node.value = "";
                     });
-                    callback(result);
+                    callback(result).then((res) => {
+                        console.log(res);
+                        if(res === true) document.getElementById("cancel").click();
+
+                    }).catch(console.error);
                 }
                 document.querySelectorAll(".cl").forEach((btn) => {
                     btn.onclick = () => {

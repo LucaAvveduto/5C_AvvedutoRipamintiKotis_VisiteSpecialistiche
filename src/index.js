@@ -32,33 +32,38 @@ fetchComp.build("../../config.json").then(() => {
         f.setLabels(["Data", "Ora", "Nominativo"]);
         f.oncancel(() => { table.render(element, offset); });
         f.onsubmit((values) => {
-            let validateInput;
-            const date = moment(values[0], "YYYY/MM/DD");
-            const closed = ["Saturday", "Sunday"];
-            if (date.calendar() < moment().calendar("MM/DD/YYYY") || closed.includes(date.format("dddd")) || isNaN(values[1])) validateInput = false;
-            const key = [element, date.format("DDMMYYYY"), values[1]].join("-");
-            console.log(validateInput);
-            fetchComp.getData().then((respose) => {
-                const json = JSON.parse(respose);
-                if (!json[key] && validateInput === undefined) {
-                    json[key] = values[2];
-                    fetchComp.setData(json).then(() => {
-                        table.render(element, offset);
-                        validateInput = true;
-                        document.getElementById("result").innerHTML = validateInput === true ? "Ok" : "Ko";
-                    }).catch((error) => {
-                        console.log(error);
+            return new Promise((resolve, reject) => {
+                let validateInput;
+                const date = moment(values[0], "YYYY/MM/DD");
+                const closed = ["Saturday", "Sunday"];
+                if (date.calendar() < moment().calendar("MM/DD/YYYY") || closed.includes(date.format("dddd")) || isNaN(values[1])) validateInput = false;
+                const key = [element, date.format("DDMMYYYY"), values[1]].join("-");
+                fetchComp.getData().then((respose) => {
+                    const json = JSON.parse(respose);
+                    if (!json[key] && validateInput === undefined) {
+                        json[key] = values[2];
+                        fetchComp.setData(json).then(() => {
+                            table.render(element, offset);
+                            validateInput = true;
+                            document.getElementById("result").innerHTML = validateInput === true ? "Ok" : "Ko";
+                            resolve(validateInput);
+                        }).catch((error) => {
+                            console.log(error);
+                            validateInput = false;
+                            document.getElementById("result").innerHTML = validateInput === true ? "Ok" : "Ko";
+                            reject(validateInput);
+                        });
+                    } else {
                         validateInput = false;
                         document.getElementById("result").innerHTML = validateInput === true ? "Ok" : "Ko";
-                    });
-                } else {
+                        reject(validateInput);
+                    }
+                }).catch((error) => {
+                    console.log(error);
                     validateInput = false;
                     document.getElementById("result").innerHTML = validateInput === true ? "Ok" : "Ko";
-                }
-            }).catch((error) => {
-                console.log(error);
-                validateInput = false;
-                document.getElementById("result").innerHTML = validateInput === true ? "Ok" : "Ko";
+                    reject(validateInput);
+                });
             });
         });
         f.render();
